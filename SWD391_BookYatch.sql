@@ -1,11 +1,11 @@
 use master 
-create database SWD391_BookYatch
+create database BookYatch
 go
-use SWD391_BookYatch
+use BookYatch
 go
 create table Agency(
 	Id UNIQUEIDENTIFIER primary key default NEWID(),
-	Nam varchar(50),
+	Name varchar(50),
 	Address varchar(50),
 	Phone varchar(11)
 )
@@ -35,7 +35,6 @@ go
 create table TicketType(
 	Id UNIQUEIDENTIFIER primary key default NEWID(),
 	Price float,
-	IdBusiness UNIQUEIDENTIFIER foreign key references [Business](Id),
 	IdTour UNIQUEIDENTIFIER foreign key references [Tour](Id)
 )
 go
@@ -53,14 +52,19 @@ create table Vehicle(
 	IdBusiness UNIQUEIDENTIFIER foreign key references [Business](Id)
 )
 go
-create table Pier(
+create table PlaceType(
 	Id UNIQUEIDENTIFIER primary key default NEWID(),
-	Address varchar(50),
 )
 go
-create table PierTour(
+create table Destination(
 	Id UNIQUEIDENTIFIER primary key default NEWID(),
-	IdPier UNIQUEIDENTIFIER foreign key references [Pier](Id),
+	Address varchar(50),
+	IdPlaceType UNIQUEIDENTIFIER foreign key references [PlaceType](Id),
+)
+go
+create table DestinationTour(
+	Id UNIQUEIDENTIFIER primary key default NEWID(),
+	IdPier UNIQUEIDENTIFIER foreign key references [Destination](Id),
 	IdTour UNIQUEIDENTIFIER foreign key references [Tour](Id)
 )
 go
@@ -68,7 +72,7 @@ create table Trip(
 	Id UNIQUEIDENTIFIER primary key default NEWID(),
 	Time timestamp,
 	IdBusiness UNIQUEIDENTIFIER foreign key references [Business](Id),
-	IdTour UNIQUEIDENTIFIER foreign key references [Tour](Id)
+	IdVehicle UNIQUEIDENTIFIER foreign key references [Vehicle](Id)
 )
 go
 create table Ticket(
@@ -80,10 +84,11 @@ create table Ticket(
 	IdTrip UNIQUEIDENTIFIER foreign key references [Trip](Id),
 )
 go
-create table TripVehicle(
+create table BusinessTour(
 	Id UNIQUEIDENTIFIER primary key default NEWID(),
-	IdTrip UNIQUEIDENTIFIER foreign key references [Trip](Id),
-	IdVehicle UNIQUEIDENTIFIER foreign key references [Vehicle](Id),
+	IdBusiness UNIQUEIDENTIFIER foreign key references [Business](Id),
+	IdTicketType UNIQUEIDENTIFIER foreign key references [TicketType](Id),
+	IdTour UNIQUEIDENTIFIER foreign key references [Tour](Id)
 )
 go
 
